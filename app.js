@@ -10,6 +10,15 @@ const currentGame = document.getElementById("currentGame");
 const scoreboard = document.getElementById("scoreboard");
 const nextRoundBtn = document.getElementById("nextRound");
 
+// Neuer Zurück-Button
+const backBtn = document.createElement("button");
+backBtn.textContent = "Zurück";
+backBtn.addEventListener("click", () => {
+  gameBoard.style.display = "none";
+  document.getElementById("game-select").style.display = "block";
+});
+gameBoard.appendChild(backBtn);
+
 let gameType = "";
 let players = [];
 const wuerfelwurstSymbols = ["Wanze", "Wespe", "Wurm", "Wachtel", "Wiesel", "Waschbär"];
@@ -69,10 +78,9 @@ function renderScoreboard() {
         btn.style.backgroundColor = btn.disabled ? "gray" : "";
         btn.classList.add("symbol-button");
 
-        // ✅ Umstellung auf .png Bilder für Wiesel und Wachtel
         if (symbol === "Wiesel" || symbol === "Wachtel") {
           const img = document.createElement("img");
-          img.src = `icons/${symbol}.png`; // vorher .tif
+          img.src = `icons/${symbol}.png`;
           img.alt = symbol;
           img.style.width = "40px";
           img.style.height = "40px";
@@ -83,12 +91,15 @@ function renderScoreboard() {
 
         btn.addEventListener("click", () => {
           if (player.usedSymbols.has(symbol)) return;
-          const score = parseInt(prompt(`Punkte für ${symbol} bei ${player.name}?`));
+          const inputScore = prompt(`Punkte für ${symbol} bei ${player.name}? Nur Zahlen erlaubt.`);
+          const score = parseInt(inputScore);
           if (!isNaN(score)) {
             player.score += score;
             player.usedSymbols.add(symbol);
             renderScoreboard();
             checkGameEnd();
+          } else {
+            alert("Bitte eine gültige Zahl eingeben.");
           }
         });
         container.appendChild(btn);
@@ -111,6 +122,12 @@ function checkGameEnd() {
   }
 }
 
+// Button "Nächste Runde" umbenannt zu "Neues Spiel"
+nextRoundBtn.textContent = "Neues Spiel";
 nextRoundBtn.addEventListener("click", () => {
-  alert("Bei Würfelwurst gibt es keine klassischen Runden. Bitte nutze die Symbol-Buttons bei jedem Spieler.");
+  players.forEach(p => {
+    p.score = 0;
+    p.usedSymbols.clear();
+  });
+  renderScoreboard();
 });
