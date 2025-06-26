@@ -65,9 +65,22 @@ function renderScoreboard() {
     if (gameType === "wuerfelwurst") {
       wuerfelwurstSymbols.forEach(symbol => {
         const btn = document.createElement("button");
-        btn.textContent = symbol;
         btn.disabled = player.usedSymbols.has(symbol);
         btn.style.backgroundColor = btn.disabled ? "gray" : "";
+        btn.classList.add("symbol-button");
+
+        // ✅ Umstellung auf .png Bilder für Wiesel und Wachtel
+        if (symbol === "Wiesel" || symbol === "Wachtel") {
+          const img = document.createElement("img");
+          img.src = `icons/${symbol}.png`; // vorher .tif
+          img.alt = symbol;
+          img.style.width = "40px";
+          img.style.height = "40px";
+          btn.appendChild(img);
+        } else {
+          btn.textContent = symbol;
+        }
+
         btn.addEventListener("click", () => {
           if (player.usedSymbols.has(symbol)) return;
           const score = parseInt(prompt(`Punkte für ${symbol} bei ${player.name}?`));
