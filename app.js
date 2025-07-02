@@ -71,7 +71,7 @@ function renderScoreboard() {
       container.style.backgroundColor = "lightgreen";
     }
 
-    if (gameType === "Wuerfelwurst") {
+    if (gameType === "wuerfelwurst") {
       wuerfelwurstSymbols.forEach(symbol => {
         const btn = document.createElement("button");
         btn.disabled = player.usedSymbols.has(symbol);
